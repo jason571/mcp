@@ -7,7 +7,6 @@
 - [FastVideo H3](fastvideo-h3.example.json)
 - [MiniMax H3](minimax-h3.example.json)
 - [Media Workflow](media-workflow.example.json)
-- [Lesson Renderer](lesson-renderer.example.json)
 - [YuE2](yue2.example.json)
 - [Z-Image](z-image.example.json)
 - [Chrome 桥接](chrome.example.json)

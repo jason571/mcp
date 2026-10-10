@@ -53,3 +53,7 @@ releases/
 *.pth
 models/
 weights/
+
+# Service retained locally, excluded from GitHub publication
+/lesson-renderer-mcp/
+/examples/lesson-renderer.example.json

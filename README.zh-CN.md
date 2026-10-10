@@ -2,7 +2,7 @@
 
 [English](README.md) | 简体中文
 
-用于视频、音乐、图片、浏览器操作、教学动画和媒体编排的独立 MCP 服务集合。每个服务通过 MCP 提供工具描述和 JSON Schema，可接入支持相应传输方式的客户端。[ExoHarness](https://github.com/jason571/Exoharness) 负责智能体、授权、执行追踪和界面，本仓库提供可执行能力。
+用于视频、音乐、图片、浏览器操作和媒体编排的独立 MCP 服务集合。每个服务通过 MCP 提供工具描述和 JSON Schema，可接入支持相应传输方式的客户端。[ExoHarness](https://github.com/jason571/Exoharness) 负责智能体、授权、执行追踪和界面，本仓库提供可执行能力。
 
 服务独立部署。导入 MCP 配置是在客户端登记连接，不会自动下载模型权重，也不会启动 GPU 推理后端。
 
@@ -13,7 +13,6 @@
 | [fastvideo-h3-mcp](fastvideo-h3-mcp/) | FastVideo H3 视频与音频生成，支持任务提交、查询、进度和取消 | Python 3.12+、GPU、H3 权重及推理后端 |
 | [minimax-h3-mcp](minimax-h3-mcp/) | 基于 ComfyUI 的 MiniMax H3 生成，支持图片输入和持久化任务 | Python 3.12+、ComfyUI 工作流、GPU 和模型文件 |
 | [media-workflow-mcp](media-workflow-mcp/) | 持久化多段计划、衔接帧提取、视频拼接及音视频合成 | Python 3.12+、FFmpeg/ffprobe 及上游服务 |
-| [lesson-renderer-mcp](lesson-renderer-mcp/README.md) | 教学计划、可局部修复的草稿及带配音的 Manim 动画 | Python 3.12、Manim、FFmpeg、字体、渲染资源及 TTS 音频 |
 | [yue2-mcp](yue2-mcp/) | 歌词与演唱歌曲生成、队列、取消及 MP3/FLAC 交付 | Python 3.11+、YuE2 推理包、主模型/VAE 权重、GPU；歌词 LLM 可选 |
 | [z-image-mcp](z-image-mcp/) | 本地图片生成和图片文件交付 | Python 3.11+、Z-Image 模型和 GPU 运行环境 |
 | [mcp-chrome](mcp-chrome/) | 通过 Chrome 扩展与原生桥接服务操作浏览器 | Node.js、pnpm、Chrome、扩展与 Native Host |
@@ -45,15 +44,13 @@ python3.12 -m venv .venv
 
 ### Docker 方式
 
-Media Workflow、Lesson Renderer 和独立 Workspace 运行时提供 Dockerfile：
+Media Workflow 和独立 Workspace 运行时提供 Dockerfile。在仓库根目录构建 Media Workflow：
 
 ```bash
 docker build -t media-workflow:local media-workflow-mcp
-docker build -t lesson-renderer:0.1.0-manim0.20.1 lesson-renderer-mcp
-docker build -t skill-workspace:local skill-workspace-mcp
 ```
 
-Media Workflow 镜像包含服务源码。Lesson Renderer 需要只读挂载源码和课件渲染资源，详见[部署说明](lesson-renderer-mcp/README.md)。Workspace 镜像用于执行任务，不是完整的 Broker 服务；其中 `/runner` 由 Broker 提供。部署时需配置持久化卷、凭据和网络策略。GPU 推理后端与模型权重分别安装。
+Media Workflow 镜像包含服务源码。独立 Workspace Dockerfile 依赖已有的 `lesson-renderer:0.1.0-manim0.20.1` 基础镜像，该基础镜像不随本仓库分发；已安装它时，可执行 `docker build -t skill-workspace:local skill-workspace-mcp` 构建任务运行时。Workspace 镜像不是完整的 Broker 服务，其中 `/runner` 由 Broker 提供。部署时需配置持久化卷、凭据和网络策略。GPU 推理后端与模型权重分别安装。
 
 ## 接入客户端
 

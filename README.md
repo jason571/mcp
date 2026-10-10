@@ -2,7 +2,7 @@
 
 English | [简体中文](README.zh-CN.md)
 
-Independent Model Context Protocol (MCP) services for generation, browser interaction, teaching and media workflows. Each service exposes its own tool descriptions and JSON Schemas and can be connected to an MCP-compatible client. [ExoHarness](https://github.com/jason571/Exoharness) provides the agent, authorization, tracing and user interface; this repository provides executable capabilities.
+Independent Model Context Protocol (MCP) services for generation, browser interaction and media workflows. Each service exposes its own tool descriptions and JSON Schemas and can be connected to an MCP-compatible client. [ExoHarness](https://github.com/jason571/Exoharness) provides the agent, authorization, tracing and user interface; this repository provides executable capabilities.
 
 Services are deployed separately. Importing an MCP configuration registers a connection; it does not download model weights or start a GPU backend.
 
@@ -13,7 +13,6 @@ Services are deployed separately. Importing an MCP configuration registers a con
 | [fastvideo-h3-mcp](fastvideo-h3-mcp/) | Queued video/audio generation through a FastVideo H3 backend; submit, query, progress and cancel | Python 3.12+, GPU, H3 weights and configured inference backend |
 | [minimax-h3-mcp](minimax-h3-mcp/) | ComfyUI-backed MiniMax H3 generation with image inputs and persistent jobs | Python 3.12+, configured ComfyUI workflow, GPU and model files |
 | [media-workflow-mcp](media-workflow-mcp/) | Durable multi-clip plans, continuity frames, video assembly and audio/video composition | Python 3.12+, FFmpeg/ffprobe and configured upstream services |
-| [lesson-renderer-mcp](lesson-renderer-mcp/README.md) | Teaching plans, repairable drafts and narrated Manim animations | Python 3.12, Manim, FFmpeg, fonts, lesson renderer resources and TTS audio |
 | [yue2-mcp](yue2-mcp/) | Lyrics and sung music generation, job queue, cancellation and MP3/FLAC results | Python 3.11+, YuE2 inference package, main/VAE weights, GPU; optional lyrics LLM |
 | [z-image-mcp](z-image-mcp/) | Local image generation and downloadable image assets | Python 3.11+, Z-Image model files and supported GPU runtime |
 | [mcp-chrome](mcp-chrome/) | Browser interaction through a Chrome extension and native bridge | Node.js, pnpm, Chrome and installed extension/native host |
@@ -45,15 +44,13 @@ Configure the signing key, data directory, allowed input origins, public asset U
 
 ### Docker
 
-Dockerfiles are supplied for Media Workflow, Lesson Renderer and the optional workspace runtime. Example build contexts:
+Dockerfiles are supplied for Media Workflow and the optional workspace runtime. Build Media Workflow from the repository root:
 
 ```bash
 docker build -t media-workflow:local media-workflow-mcp
-docker build -t lesson-renderer:0.1.0-manim0.20.1 lesson-renderer-mcp
-docker build -t skill-workspace:local skill-workspace-mcp
 ```
 
-Media Workflow includes its source in the image. Lesson Renderer uses read-only source and renderer-resource mounts; see its [deployment notes](lesson-renderer-mcp/README.md). The workspace image is a **task execution image**, not a complete broker deployment: its `/runner` entrypoint is supplied by the broker. Configure volumes, credentials, network policy and persistent storage for your deployment. GPU inference backends and weights are installed independently.
+Media Workflow includes its source in the image. The optional workspace Dockerfile requires a pre-existing `lesson-renderer:0.1.0-manim0.20.1` base image, which is not distributed in this repository. If that image is already installed, build with `docker build -t skill-workspace:local skill-workspace-mcp`. The workspace image is a **task execution image**, not a complete broker deployment: its `/runner` entrypoint is supplied by the broker. Configure volumes, credentials, network policy and persistent storage for your deployment. GPU inference backends and weights are installed independently.
 
 ## Connect to ExoHarness or another MCP client
 
