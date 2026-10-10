@@ -1,0 +1,16 @@
+.venv/
+.env
+.env.*
+!.env.example
+var/
+artifacts/
+*.log
+*.egg-info/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+deploy/production.env
+docs/LOCAL_VALIDATION.md

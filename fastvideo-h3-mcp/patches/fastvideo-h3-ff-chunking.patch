@@ -1,0 +1,63 @@
+--- a/fastvideo/models/dits/minimax_h3.py
++++ b/fastvideo/models/dits/minimax_h3.py
+@@ -4,6 +4,7 @@
+ from __future__ import annotations
+ 
+ import math
++import os
+ from typing import Any
+ 
+ import torch
+@@ -44,6 +45,21 @@
+ _MINIMAX_H3_FUSION_NAMES = frozenset({"modulate", "qknorm_rope", "swiglu"})
+ 
+ 
++def _configured_ff_chunk_tokens() -> int:
++    raw = os.getenv("FASTVIDEO_MINIMAX_H3_FF_CHUNK_TOKENS", "0").strip()
++    try:
++        value = int(raw)
++    except ValueError as exc:
++        raise ValueError(
++            "FASTVIDEO_MINIMAX_H3_FF_CHUNK_TOKENS must be an integer"
++        ) from exc
++    if value < 0:
++        raise ValueError(
++            "FASTVIDEO_MINIMAX_H3_FF_CHUNK_TOKENS must be greater than or equal to zero"
++        )
++    return value
++
++
+ def _enabled_minimax_h3_fusions(value: str | None = None) -> frozenset[str]:
+     """Parse the independently switchable inference fusion set."""
+     raw = envs.FASTVIDEO_MINIMAX_H3_FUSIONS if value is None else value
+@@ -119,6 +135,7 @@
+             prefix=f"{prefix}.fc_out",
+         )
+         self.fuse_swiglu = fuse_swiglu
++        self.chunk_tokens = _configured_ff_chunk_tokens()
+ 
+     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
+         hidden_states, _ = self.fc_in(hidden_states)
+@@ -536,6 +553,22 @@
+             norm_hidden_states = self.norm2(hidden_states)
+             norm_hidden_states = norm_hidden_states * (
+                 1.0 + scale_mlp.index_select(0, adaln_indices)) + shift_mlp.index_select(0, adaln_indices)
++        chunk_tokens = self.ff.chunk_tokens
++        sequence_length = norm_hidden_states.shape[-2]
++        if chunk_tokens and sequence_length > chunk_tokens:
++            # The MLP is token-wise. Chunk it together with residual gating so
++            # long clips do not materialize full-sequence SwiGLU and gate
++            # temporaries, while preserving the exact attention computation.
++            del attention_output
++            for start in range(0, sequence_length, chunk_tokens):
++                stop = min(start + chunk_tokens, sequence_length)
++                token_slice = slice(start, stop)
++                feed_forward_chunk = self.ff(norm_hidden_states[..., token_slice, :])
++                gate_chunk = gate_mlp.index_select(0, adaln_indices[token_slice])
++                feed_forward_chunk.mul_(gate_chunk)
++                hidden_states[..., token_slice, :].add_(feed_forward_chunk)
++            return hidden_states
++
+         feed_forward_output = self.ff(norm_hidden_states)
+         return hidden_states + gate_mlp.index_select(0, adaln_indices) * feed_forward_output
+ 

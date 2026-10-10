@@ -1,0 +1,40 @@
+diff --git a/fastvideo/layers/lora/linear.py b/fastvideo/layers/lora/linear.py
+index 7da789b..f127c58 100644
+--- a/fastvideo/layers/lora/linear.py
++++ b/fastvideo/layers/lora/linear.py
+@@ -2,6 +2,7 @@
+ # Code adapted from SGLang https://github.com/sgl-project/sglang/blob/main/python/sglang/srt/lora/layers.py
+ 
+ import math
++import os
+ 
+ import torch
+ from torch import nn
+@@ -30,9 +31,14 @@ class BaseLayerWithLoRA(nn.Module):
+     ):
+         super().__init__()
+         self.base_layer: nn.Module = base_layer
+ 
+         self.merged: bool = False
+-        self.cpu_weight = base_layer.weight.to("cpu")
++        keep_cpu_backup = os.environ.get(
++            "FASTVIDEO_LORA_CPU_BACKUP", "1"
++        ).strip().lower() not in ("0", "false", "no", "off")
++        self.cpu_weight = (
++            base_layer.weight.to("cpu") if keep_cpu_backup else None
++        )
+         # indicates adapter weights don't contain this layer
+         # (which shouldn't normally happen, but we want to separate it from the case of erroneous merging)
+         self.disable_lora: bool = False
+@@ -181,6 +187,11 @@ class BaseLayerWithLoRA(nn.Module):
+             raise ValueError("unmerge_lora_weights called but no LoRA is currently merged")
+ 
+         # avoid precision loss
++        if self.cpu_weight is None:
++            raise RuntimeError(
++                "LoRA unmerge is unavailable when FASTVIDEO_LORA_CPU_BACKUP=0; "
++                "use a one-shot worker or keep the default CPU backup"
++            )
+         if isinstance(self.base_layer.weight, DTensor):
+             device = self.base_layer.weight.data.device
+             self.base_layer.weight = nn.Parameter(self.cpu_weight.to(device, non_blocking=True))

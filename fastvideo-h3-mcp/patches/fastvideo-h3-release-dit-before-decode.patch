@@ -1,0 +1,32 @@
+--- a/fastvideo/pipelines/basic/minimax_h3/stages/minimax_h3_denoising.py
++++ b/fastvideo/pipelines/basic/minimax_h3/stages/minimax_h3_denoising.py
+@@ -316,7 +316,28 @@ class MiniMaxH3DenoisingStage(PipelineStage):
+                 manager = getattr(self.transformer, "_layerwise_offload_manager", None)
+                 if manager is not None and getattr(manager, "enabled", False):
+                     manager.release_all()
+-            if full_cpu_offload:
++            release_dit = os.environ.get(
++                "FASTVIDEO_MINIMAX_H3_RELEASE_DIT_AFTER_DENOISE", "0"
++            ).strip().lower() in {"1", "true", "yes", "on"}
++            if release_dit:
++                if bool(getattr(fastvideo_args, "use_fsdp_inference", False)):
++                    raise RuntimeError(
++                        "FASTVIDEO_MINIMAX_H3_RELEASE_DIT_AFTER_DENOISE only supports "
++                        "single-process non-FSDP inference"
++                    )
++                allocated_before = torch.cuda.memory_allocated(device)
++                # This CLI worker serves exactly one MCP generation. Moving the
++                # completed DiT to meta releases its parameter storage without
++                # requiring a roughly 70 GiB CPU copy, leaving room for the VAE.
++                self.transformer.to("meta")
++                torch.cuda.empty_cache()
++                allocated_after = torch.cuda.memory_allocated(device)
++                logger.info(
++                    "Released MiniMax H3 DiT before decode: %.2f GiB -> %.2f GiB allocated",
++                    allocated_before / 2**30,
++                    allocated_after / 2**30,
++                )
++            elif full_cpu_offload:
+                 self.transformer.to("cpu")
+         return batch
+ 

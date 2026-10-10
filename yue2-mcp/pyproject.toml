@@ -1,0 +1,31 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "yue2-mcp"
+version = "0.2.0"
+description = "Queued YuE2 music generation MCP"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["mcp>=1.30,<2", "pydantic-settings>=2.10,<3", "httpx>=0.28,<1", "uvicorn>=0.35,<1", "soundfile>=0.13,<1"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.12,<1"]
+
+[project.scripts]
+yue2-mcp = "yue2_mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/yue2_mcp"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]

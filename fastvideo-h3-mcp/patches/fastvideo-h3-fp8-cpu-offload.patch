@@ -1,0 +1,11 @@
+--- a/examples/inference/basic/basic_minimax_h3_t2v.py
++++ b/examples/inference/basic/basic_minimax_h3_t2v.py
+@@ -93,7 +93,7 @@ def main() -> None:
+                 offload=OffloadConfig(
+                     dit=False,
+                     dit_layerwise=False,
+-                    text_encoder=not args.text_encoder_fp8,
++                    text_encoder=True,
+                     vae=True,
+                     pin_cpu_memory=False,
+                 ),

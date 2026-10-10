@@ -1,0 +1,19 @@
+--- a/fastvideo/models/loader/fsdp_load.py
++++ b/fastvideo/models/loader/fsdp_load.py
+@@ -272,6 +272,15 @@ def maybe_load_fsdp_model(
+                  and try_load_from_shard_cache(model, shard_cache_ctx, device, strict=strict))
+     if not cache_hit:
+-        weight_iterator = safetensors_weights_iterator(weight_dir_list, to_cpu=True)
++        direct_device_load = (
++            os.getenv("FASTVIDEO_LOAD_WEIGHTS_DIRECT_TO_DEVICE", "0").strip().lower()
++            in {"1", "true", "yes", "on"}
++        ) and not cpu_offload
++        if direct_device_load:
++            logger.info(
++                "Loading safetensors directly to %s to avoid a full CPU state-dict copy",
++                device,
++            )
++        weight_iterator = safetensors_weights_iterator(weight_dir_list, to_cpu=not direct_device_load)
+         param_names_mapping_fn = get_param_names_mapping(model.param_names_mapping)
+         load_model_from_full_model_state_dict(
+             model,

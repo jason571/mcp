@@ -1,0 +1,20 @@
+[Unit]
+Description=FastVideo H3 MCP video generation service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=CHANGE_ME
+Group=CHANGE_ME
+WorkingDirectory=/opt/fastvideo-h3-mcp
+EnvironmentFile=/etc/fastvideo-h3-mcp.env
+ExecStart=/opt/fastvideo-h3-mcp/.venv/bin/fastvideo-h3-mcp
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

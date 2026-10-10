@@ -1,0 +1,35 @@
+--- a/fastvideo/models/dits/minimax_h3.py
++++ b/fastvideo/models/dits/minimax_h3.py
+@@ -887,6 +887,12 @@
+         mcp_step = getattr(self, "_mcp_progress_step", None)
+         mcp_total_steps = getattr(self, "_mcp_progress_total_steps", None)
+         total_blocks = len(self.transformer_blocks)
++        ff_chunk_tokens = self.transformer_blocks[0].ff.chunk_tokens
++        block_progress_stride = (
++            1
++            if ff_chunk_tokens and packed_hidden_states.shape[-2] > ff_chunk_tokens
++            else 5
++        )
+         for block_index, block in enumerate(self.transformer_blocks):
+             with nvtx_range(f"minimax_h3.transformer_block.{block_index}"):
+                 packed_hidden_states = block(
+@@ -896,12 +902,17 @@
+                     rotary_emb,
+                     original_seq_len,
+                 )
+-            if mcp_step is not None and mcp_total_steps is not None:
++            block_number = block_index + 1
++            if (
++                mcp_step is not None
++                and mcp_total_steps is not None
++                and (block_number % block_progress_stride == 0 or block_number == total_blocks)
++            ):
+                 logger.info(
+                     "MCP_PROGRESS h3_transformer_block step=%d/%d block=%d/%d phase=completed",
+                     mcp_step,
+                     mcp_total_steps,
+-                    block_index + 1,
++                    block_number,
+                     total_blocks,
+                 )
+ 

@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "z-image-mcp"
+version = "0.1.0"
+description = "Self-hosted MCP image generation with Tongyi-MAI/Z-Image-Turbo"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = [
+  "mcp>=1.30,<2",
+  "pydantic-settings>=2.10,<3",
+  "pillow>=11,<13",
+  "uvicorn>=0.35,<1",
+  "httpx>=0.28,<1",
+]
+
+[project.optional-dependencies]
+gpu = [
+  "torch>=2.7,<3",
+  "diffusers==0.39.0",
+  "transformers==5.15.1",
+  "accelerate==1.14.0",
+  "safetensors>=0.6,<1",
+]
+dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.12,<1"]
+
+[project.scripts]
+z-image-mcp = "z_image_mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/z_image_mcp"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]

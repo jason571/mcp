@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "z-image": {
+      "url": "http://YOUR_SERVER:8766/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_MCP_TOKEN"
+      },
+      "description": "基于 Tongyi-MAI/Z-Image-Turbo 的图片生成服务，支持中英文提示词、自定义图片尺寸、实时生成进度、后台任务查询与取消，以及 PNG 图片下载。"
+    }
+  }
+}

@@ -1,0 +1,82 @@
+diff --git a/fastvideo/api/schema.py b/fastvideo/api/schema.py
+index 8458db2..55cc6aa 100644
+--- a/fastvideo/api/schema.py
++++ b/fastvideo/api/schema.py
+@@ -93,6 +93,8 @@ class ComponentConfig:
+     vae_weights: str | None = None
+     upsampler_weights: str | None = None
+     lora_path: str | None = None
++    lora_alpha: int | None = None
++    lora_strength: float | None = None
+     override_pipeline_cls_name: str | None = None
+     override_transformer_cls_name: str | None = None
+ 
+diff --git a/fastvideo/api/compat.py b/fastvideo/api/compat.py
+index 927281c..574fca1 100644
+--- a/fastvideo/api/compat.py
++++ b/fastvideo/api/compat.py
+@@ -283,6 +283,10 @@ def generator_config_to_fastvideo_args(config: GeneratorConfig | Mapping[str, A
+         kwargs["pipeline_config"] = components.pipeline_config_path
+     if components.lora_path is not None:
+         kwargs["lora_path"] = components.lora_path
++    if components.lora_alpha is not None:
++        kwargs["lora_alpha"] = components.lora_alpha
++    if components.lora_strength is not None:
++        kwargs["lora_strength"] = components.lora_strength
+     if components.override_pipeline_cls_name is not None:
+         kwargs["override_pipeline_cls_name"] = components.override_pipeline_cls_name
+     if components.override_transformer_cls_name is not None:
+diff --git a/fastvideo/fastvideo_args.py b/fastvideo/fastvideo_args.py
+index d5d141c..3d03abc 100644
+--- a/fastvideo/fastvideo_args.py
++++ b/fastvideo/fastvideo_args.py
+@@ -118,6 +118,8 @@ class FastVideoArgs:
+     # LoRA parameters
+     # (Wenxuan) prefer to keep it here instead of in pipeline config to not make it complicated.
+     lora_path: str | None = None
++    lora_alpha: int | None = None
++    lora_strength: float = 1.0
+     lora_nickname: str = "default"  # for swapping adapters in the pipeline
+     # can restrict layers to adapt, e.g. ["q_proj"]
+     # Will adapt only q, k, v, o by default.
+diff --git a/fastvideo/pipelines/lora_pipeline.py b/fastvideo/pipelines/lora_pipeline.py
+index cf6cc88..8012a65 100644
+--- a/fastvideo/pipelines/lora_pipeline.py
++++ b/fastvideo/pipelines/lora_pipeline.py
+@@ -114,6 +114,7 @@ class LoRAPipeline(ComposedPipelineBase):
+     lora_nickname: str = "default"
+     lora_rank: int | None = None
+     lora_alpha: int | None = None
++    lora_strength: float = 1.0
+     lora_initialized: bool = False
+ 
+     def __init__(self, *args, **kwargs) -> None:
+@@ -149,6 +150,8 @@ class LoRAPipeline(ComposedPipelineBase):
+         self.lora_path = self.fastvideo_args.lora_path
+         self.lora_nickname = self.fastvideo_args.lora_nickname
+         self.training_mode = self.fastvideo_args.training_mode
++        self.lora_alpha = self.fastvideo_args.lora_alpha
++        self.lora_strength = self.fastvideo_args.lora_strength
+         if self.training_mode and getattr(self.fastvideo_args, "lora_training", False):
+             assert isinstance(self.fastvideo_args, TrainingArgs)
+             if self.fastvideo_args.lora_alpha is None:
+@@ -188,6 +191,7 @@ class LoRAPipeline(ComposedPipelineBase):
+             self.set_lora_adapter(
+                 self.lora_nickname,  # type: ignore
+                 self.lora_path,
++                strength=self.lora_strength,
+             )  # type: ignore
+ 
+     def is_target_layer(self, module_name: str) -> bool:
+@@ -390,7 +394,10 @@ class LoRAPipeline(ComposedPipelineBase):
+                             lora_A = self.lora_adapters[lora_nickname][lora_A_name]
+                             lora_B = self.lora_adapters[lora_nickname][lora_B_name]
+                             # Simple lookup - alpha stored with same naming scheme as lora_A/lora_B
+-                            alpha = self.lora_adapters[lora_nickname].get(lora_alpha_name)
++                            alpha = self.lora_adapters[lora_nickname].get(
++                                lora_alpha_name,
++                                self.lora_alpha,
++                            )
+                             try:
+                                 layer.set_lora_weights(
+                                     lora_A,

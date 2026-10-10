@@ -1,0 +1,16 @@
+[Unit]
+Description=YuE2 Music MCP
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/clhh/yue2-mcp
+EnvironmentFile=/home/clhh/yue2-mcp/.env
+ExecStart=/home/clhh/yue2-mcp/.venv/bin/yue2-mcp
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=180
+
+[Install]
+WantedBy=default.target

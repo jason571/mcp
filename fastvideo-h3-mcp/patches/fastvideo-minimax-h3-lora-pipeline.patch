@@ -1,0 +1,89 @@
+--- a/fastvideo/pipelines/basic/minimax_h3/minimax_h3_pipeline.py
++++ b/fastvideo/pipelines/basic/minimax_h3/minimax_h3_pipeline.py
+@@ -13,10 +13,10 @@
+     MiniMaxH3LatentPreparationStage,
+     MiniMaxH3VideoDecodingStage,
+ )
+-from fastvideo.pipelines.composed_pipeline_base import ComposedPipelineBase
++from fastvideo.pipelines.lora_pipeline import LoRAPipeline
+ 
+ 
+-class MiniMaxH3BasePipeline(ComposedPipelineBase):
++class MiniMaxH3BasePipeline(LoRAPipeline):
+     """Shared loading and target-generation path for MiniMax H3."""
+ 
+     pipeline_config_cls: type[MiniMaxH3PipelineConfig] = MiniMaxH3PipelineConfig
+--- a/fastvideo/pipelines/lora_pipeline.py
++++ b/fastvideo/pipelines/lora_pipeline.py
+@@ -2,6 +2,7 @@
+ from collections import defaultdict
+ from collections.abc import Hashable
+ from contextlib import nullcontext
++import os
+ from typing import Any
+ from collections.abc import Generator
+ 
+@@ -377,8 +378,32 @@
+         self.cur_adapter_name = lora_nickname
+         self.cur_adapter_strength = strength
+ 
++        require_complete = os.environ.get(
++            "FASTVIDEO_REQUIRE_COMPLETE_LORA", "0"
++        ).strip().lower() in ("1", "true", "yes", "on")
++        adapter_weights = self.lora_adapters[lora_nickname]
++        lora_a_layers = {
++            name[: -len(".lora_A")]
++            for name in adapter_weights
++            if name.endswith(".lora_A")
++        }
++        lora_b_layers = {
++            name[: -len(".lora_B")]
++            for name in adapter_weights
++            if name.endswith(".lora_B")
++        }
++        if require_complete and lora_a_layers != lora_b_layers:
++            raise RuntimeError(
++                "strict LoRA loading found unpaired adapter tensors: "
++                f"missing_A={sorted(lora_b_layers - lora_a_layers)[:3]}, "
++                f"missing_B={sorted(lora_a_layers - lora_b_layers)[:3]}"
++            )
++        expected_adapter_layers = lora_a_layers & lora_b_layers
++
+         # Merge the new adapter
+         adapted_count = 0
++        adapted_layer_names: set[str] = set()
++        missing_target_layers: list[str] = []
+         for (
+                 transformer_name,
+                 transformer_lora_layers,
+@@ -420,7 +445,9 @@
+                                 )
+                                 raise e
+                             adapted_count += 1
++                            adapted_layer_names.add(name)
+                         else:
++                            missing_target_layers.append(name)
+                             if rank == 0:
+                                 logger.warning(
+                                     "LoRA adapter %s does not contain the weights for layer %s. LoRA will not be applied to it.",
+@@ -428,6 +455,20 @@
+                                     name,
+                                 )
+                             layer.disable_lora = True
++        if require_complete:
++            unapplied_adapter_layers = expected_adapter_layers - adapted_layer_names
++            if (
++                adapted_count == 0
++                or missing_target_layers
++                or unapplied_adapter_layers
++                or len(adapted_layer_names) != len(expected_adapter_layers)
++            ):
++                raise RuntimeError(
++                    "strict LoRA loading did not apply the complete adapter: "
++                    f"expected={len(expected_adapter_layers)}, applied={adapted_count}, "
++                    f"missing_targets={missing_target_layers[:3]}, "
++                    f"unapplied_adapter_layers={sorted(unapplied_adapter_layers)[:3]}"
++                )
+         logger.info(
+             "Rank %d: LoRA adapter %s applied to %d layers",
+             rank,

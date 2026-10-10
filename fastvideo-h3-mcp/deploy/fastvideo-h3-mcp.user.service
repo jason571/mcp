@@ -1,0 +1,16 @@
+[Unit]
+Description=FastVideo MiniMax H3 MCP service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/clhh/fastvideo-h3-mcp
+ExecStart=/home/clhh/fastvideo-h3-mcp/scripts/run-production.sh
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+KillMode=mixed
+
+[Install]
+WantedBy=default.target

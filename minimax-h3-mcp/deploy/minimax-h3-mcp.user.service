@@ -1,0 +1,17 @@
+[Unit]
+Description=MiniMax H3 MCP service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/clhh/minimax-h3-mcp
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/clhh/minimax-h3-mcp/scripts/run-production.sh
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+KillMode=mixed
+
+[Install]
+WantedBy=default.target

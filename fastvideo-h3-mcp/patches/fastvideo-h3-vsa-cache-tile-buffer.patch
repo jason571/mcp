@@ -1,0 +1,66 @@
+--- a/fastvideo/attention/backends/video_sparse_attn_h3.py
++++ b/fastvideo/attention/backends/video_sparse_attn_h3.py
+@@ -82,6 +82,22 @@
+ # Opt-in switch for the sm_100a CUDA forward on the tile-64 no-grad path.
+ VSA_SM100A_ENV = "FASTVIDEO_VSA_SM100A"
+ 
++# Long single-GPU inference can release the padded QKV transport buffer after
++# every attention call instead of retaining it for the whole denoising loop.
++VSA_CACHE_TILE_BUFFER_ENV = "FASTVIDEO_VSA_CACHE_TILE_BUFFER"
++
++
++def _cache_tile_buffer_enabled() -> bool:
++    raw = os.environ.get(VSA_CACHE_TILE_BUFFER_ENV, "1").strip().lower()
++    if raw in {"1", "true", "yes", "on"}:
++        return True
++    if raw in {"0", "false", "no", "off"}:
++        return False
++    raise ValueError(
++        f"{VSA_CACHE_TILE_BUFFER_ENV} must be a boolean, got {raw!r}"
++    )
++
++
+ VSA_H3_TILE_SIZE = (4, 8, 8)  # 256 elements -> FA4 CuTe fastpath on sm10.x (default)
+ _TILE_ELEMS = math.prod(VSA_H3_TILE_SIZE)
+ # Selectable tile geometries, keyed by element count (= the build-time
+@@ -250,6 +266,7 @@
+     tile_elems: int = _TILE_ELEMS
+     # layers forced dense regardless of sparsity (probe-guided opt-outs)
+     dense_layers: tuple[int, ...] = ()
++    cache_tile_buffer: bool = True
+     # Holder for the padded tile buffer, owned by the BUILDER so one allocation
+     # serves the whole denoising loop. It also records which cached untile
+     # geometry last populated the buffer: steady-state calls overwrite only
+@@ -263,7 +280,10 @@
+ class MiniMaxH3VSAMetadataBuilder(AttentionMetadataBuilder):
+ 
+     def __init__(self) -> None:
+-        self._tile_buf_holder = _MiniMaxH3VSATileBufferHolder()
++        self._cache_tile_buffer = _cache_tile_buffer_enabled()
++        self._tile_buf_holder = (
++            _MiniMaxH3VSATileBufferHolder() if self._cache_tile_buffer else None
++        )
+ 
+     def prepare(self) -> None:
+         pass
+@@ -303,6 +323,7 @@
+             untile_combined_index=untile_combined_index,
+             tile_elems=int(tile_size),
+             dense_layers=tuple(int(layer) for layer in dense_layers),
++            cache_tile_buffer=self._cache_tile_buffer,
+             tile_buf_holder=self._tile_buf_holder,
+         )
+ 
+@@ -413,6 +434,12 @@
+             # vsa_cache_tile_buf=False default.
+             return scatter_into_tile_buf(x, target_shape, attn_metadata.untile_combined_index, None)
+ 
++        if not attn_metadata.cache_tile_buffer:
++            # Keep the allocation alive only through this attention call. The
++            # Q/K/V views alias it, then normal reference counting releases it
++            # instead of pinning a long-video-sized buffer in the builder.
++            return scatter_into_tile_buf(x, target_shape, attn_metadata.untile_combined_index, None)
++
+         # Single scatter: untile_combined_index maps original row i to its
+         # padded slot, so this is exactly the inverse of postprocess_output.
+         # A builder spans native-shape batches. Two different geometries can

@@ -1,0 +1,61 @@
+--- a/fastvideo/models/dits/minimax_h3.py
++++ b/fastvideo/models/dits/minimax_h3.py
+@@ -60,6 +60,21 @@
+     return value
+ 
+ 
++def _configured_vsa_attention_residual_chunk_tokens() -> int:
++    raw = os.getenv("FASTVIDEO_VSA_ATTENTION_RESIDUAL_CHUNK_TOKENS", "0").strip()
++    try:
++        value = int(raw)
++    except ValueError as exc:
++        raise ValueError(
++            "FASTVIDEO_VSA_ATTENTION_RESIDUAL_CHUNK_TOKENS must be an integer"
++        ) from exc
++    if value < 0:
++        raise ValueError(
++            "FASTVIDEO_VSA_ATTENTION_RESIDUAL_CHUNK_TOKENS must be greater than or equal to zero"
++        )
++    return value
++
++
+ def _enabled_minimax_h3_fusions(value: str | None = None) -> frozenset[str]:
+     """Parse the independently switchable inference fusion set."""
+     raw = envs.FASTVIDEO_MINIMAX_H3_FUSIONS if value is None else value
+@@ -510,6 +525,7 @@
+             apply_silu=adaln_apply_silu,
+         )
+         self.fuse_modulate = fuse_modulate
++        self.vsa_attention_residual_chunk_tokens = _configured_vsa_attention_residual_chunk_tokens()
+ 
+     def forward(
+         self,
+@@ -548,6 +564,28 @@
+                 adaln_indices,
+                 self.norm2.eps,
+             )
++        elif (
++            self.vsa_attention_residual_chunk_tokens
++            and hidden_states.shape[-2] > self.vsa_attention_residual_chunk_tokens
++            and not torch.is_grad_enabled()
++        ):
++            # VSA can return a full-sequence attention tensor while its padded
++            # QKV transport is still live. Apply the gated residual in-place
++            # by token chunks so no second full-sequence gate product is
++            # materialized at that peak. MCP exports zero for Dense runs.
++            sequence_length = hidden_states.shape[-2]
++            chunk_tokens = self.vsa_attention_residual_chunk_tokens
++            for start in range(0, sequence_length, chunk_tokens):
++                stop = min(start + chunk_tokens, sequence_length)
++                token_slice = slice(start, stop)
++                gate_chunk = gate_msa.index_select(0, adaln_indices[token_slice])
++                hidden_states[..., token_slice, :].add_(
++                    gate_chunk * attention_output[..., token_slice, :]
++                )
++            del attention_output
++            norm_hidden_states = self.norm2(hidden_states)
++            norm_hidden_states = norm_hidden_states * (
++                1.0 + scale_mlp.index_select(0, adaln_indices)) + shift_mlp.index_select(0, adaln_indices)
+         else:
+             hidden_states = hidden_states + gate_msa.index_select(0, adaln_indices) * attention_output
+             norm_hidden_states = self.norm2(hidden_states)

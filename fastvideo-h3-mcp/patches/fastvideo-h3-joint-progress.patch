@@ -1,0 +1,31 @@
+--- a/fastvideo/pipelines/basic/minimax_h3/stages/minimax_h3_denoising.py
++++ b/fastvideo/pipelines/basic/minimax_h3/stages/minimax_h3_denoising.py
+@@ -150,6 +150,9 @@ class MiniMaxH3DenoisingStage(PipelineStage):
+         if len(video_timesteps) != len(audio_timesteps):
+             raise ValueError("MiniMax-H3 video and audio schedules must have the same number of intervals.")
+ 
++        emit_mcp_progress = os.environ.get("FASTVIDEO_MCP_PROGRESS", "0").strip().lower() in {
++            "1", "true", "yes", "on"
++        }
+         row_timestep_plan = []
+         for video_timestep, audio_timestep in zip(video_timesteps, audio_timesteps, strict=True):
+             video_value = float(video_timestep.item())
+@@ -199,5 +202,8 @@ class MiniMaxH3DenoisingStage(PipelineStage):
+                 for index, (video_timestep,
+                             audio_timestep) in enumerate(zip(video_timesteps, audio_timesteps, strict=True)):
++                    if emit_mcp_progress:
++                        logger.info("MCP_PROGRESS h3_joint_denoise step=%d/%d phase=started", index + 1,
++                                    len(video_timesteps))
+                     unique_timesteps, timestep_indices = row_timestep_plan[index]
+                     attn_metadata = None
+                     if vsa_metadata_builder is not None:
+@@ -283,6 +289,9 @@ class MiniMaxH3DenoisingStage(PipelineStage):
+                         )[0]
+                     batch.step_index = index
+                     batch.timestep = video_timestep
++                    if emit_mcp_progress:
++                        logger.info("MCP_PROGRESS h3_joint_denoise step=%d/%d phase=completed", index + 1,
++                                    len(video_timesteps))
+         finally:
+             if bool(getattr(fastvideo_args, "dit_layerwise_offload", False)):
+                 manager = getattr(self.transformer, "_layerwise_offload_manager", None)

@@ -1,0 +1,17 @@
+{
+    "mcpServers": {
+      "weather-forecast": {
+        "command": "/这里替换为-which-python-输出",
+        "args": [
+          "-m",
+          "weather_forecast_server"
+        ],
+        "env": {
+          "PYTHONPATH": "/mnt/e/workspace/test/weather-forecast-server"
+        },
+        "description": "Weather forecast MCP server using wttr.in",
+        "version": "0.0.7",
+        "namespace": "weather"
+      }
+    }
+  }

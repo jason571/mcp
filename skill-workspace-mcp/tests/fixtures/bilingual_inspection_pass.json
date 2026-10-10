@@ -1,0 +1,423 @@
+{
+  "source_run": "run-1a113ee9b95-7-c",
+  "inspection": {
+    "source_sha256": "16ac81764e3306b2f7bcf99be4d1316445fdff1bdb1ef39b25e6481316a169c4",
+    "scenarios": [
+      {
+        "title": "永嘉农产品 | Yongjia Farm Produce",
+        "horizontal_overflow": false,
+        "page_width": 1440,
+        "viewport_width": 1440,
+        "page_height": 5761,
+        "headings": [
+          {
+            "text": "\n        一江楠溪水，养出永嘉好农品\n        One River, One Valley,Good Food from Yongjia\n      ",
+            "visible": true
+          },
+          {
+            "text": "山水之间，长出好味道",
+            "visible": true
+          },
+          {
+            "text": "Good Flavour Grows Between Mountains and Water",
+            "visible": false
+          },
+          {
+            "text": "楠溪江水",
+            "visible": true
+          },
+          {
+            "text": "Nanxi River Water",
+            "visible": false
+          },
+          {
+            "text": "丘陵云雾",
+            "visible": true
+          },
+          {
+            "text": "Misty Hillsides",
+            "visible": false
+          },
+          {
+            "text": "四季分明",
+            "visible": true
+          },
+          {
+            "text": "Four Clear Seasons",
+            "visible": false
+          },
+          {
+            "text": "耕读手艺",
+            "visible": true
+          },
+          {
+            "text": "Farm-and-Read Craft",
+            "visible": false
+          },
+          {
+            "text": "一江山水，四季鲜香One River, Four Seasons of Flavour",
+            "visible": true
+          },
+          {
+            "text": "乌牛早茶",
+            "visible": true
+          },
+          {
+            "text": "Wuniuzao Green Tea",
+            "visible": false
+          },
+          {
+            "text": "永嘉板栗",
+            "visible": true
+          },
+          {
+            "text": "Yongjia Chestnut",
+            "visible": false
+          },
+          {
+            "text": "永嘉早香柚",
+            "visible": true
+          },
+          {
+            "text": "Yongjia Pomelo",
+            "visible": false
+          },
+          {
+            "text": "楠溪江稻米",
+            "visible": true
+          },
+          {
+            "text": "Nanxi River Rice",
+            "visible": false
+          },
+          {
+            "text": "跟着二十四节气，吃永嘉Eat Yongjia with the 24 Solar Terms",
+            "visible": true
+          },
+          {
+            "text": "乌牛早开采",
+            "visible": true
+          },
+          {
+            "text": "Wuniuzao harvest",
+            "visible": false
+          },
+          {
+            "text": "杨梅与山果",
+            "visible": true
+          },
+          {
+            "text": "Bayberry & hill fruit",
+            "visible": false
+          }
+        ],
+        "hidden_text_blocks": [
+          "#hero > div.wrap.hero-inner > div.hero-copy > p.eyebrow",
+          "#hero > div.wrap.hero-inner > div.hero-copy > p.hero-sub",
+          "#terroir > div.wrap > div.sec-head.reveal > p.eyebrow",
+          "#terroir > div.wrap > div.sec-head.reveal > h2.sec-title",
+          "#terroir > div.wrap > div.sec-head.reveal > p.sec-sub",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > h3:nth-of-type(2)",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > p:nth-of-type(2)",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > h3:nth-of-type(2)",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > p:nth-of-type(2)",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > h3:nth-of-type(2)",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > p:nth-of-type(2)",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > h3:nth-of-type(2)",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > p:nth-of-type(2)",
+          "div.wrap > div.prod-grid > article.prod-card.reveal > h3.prod-name",
+          "div.wrap > div.prod-grid > article.prod-card.reveal > p.prod-en",
+          "div.wrap > div.prod-grid > article.prod-card.reveal > p.prod-desc",
+          "div.wrap > div.prod-grid > article.prod-card.reveal > h3.prod-name",
+          "div.wrap > div.prod-grid > article.prod-card.reveal > p.prod-en",
+          "div.wrap > div.prod-grid > article.prod-card.reveal > p.prod-desc",
+          "div.wrap > div.prod-grid > article.prod-card.reveal > h3.prod-name"
+        ],
+        "unexpected_hidden_text_blocks": [],
+        "unreadable_headings": [],
+        "broken_images": [],
+        "missing_anchors": [],
+        "overflowing_elements": [],
+        "overflow_details": [],
+        "visible_text_chars": 2213,
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "javascript": true,
+        "console_errors": [],
+        "blocked_requests": []
+      },
+      {
+        "title": "永嘉农产品 | Yongjia Farm Produce",
+        "horizontal_overflow": false,
+        "page_width": 390,
+        "viewport_width": 390,
+        "page_height": 9732,
+        "headings": [
+          {
+            "text": "\n        一江楠溪水，养出永嘉好农品\n        One River, One Valley,Good Food from Yongjia\n      ",
+            "visible": true
+          },
+          {
+            "text": "山水之间，长出好味道",
+            "visible": true
+          },
+          {
+            "text": "Good Flavour Grows Between Mountains and Water",
+            "visible": false
+          },
+          {
+            "text": "楠溪江水",
+            "visible": true
+          },
+          {
+            "text": "Nanxi River Water",
+            "visible": false
+          },
+          {
+            "text": "丘陵云雾",
+            "visible": true
+          },
+          {
+            "text": "Misty Hillsides",
+            "visible": false
+          },
+          {
+            "text": "四季分明",
+            "visible": true
+          },
+          {
+            "text": "Four Clear Seasons",
+            "visible": false
+          },
+          {
+            "text": "耕读手艺",
+            "visible": true
+          },
+          {
+            "text": "Farm-and-Read Craft",
+            "visible": false
+          },
+          {
+            "text": "一江山水，四季鲜香One River, Four Seasons of Flavour",
+            "visible": true
+          },
+          {
+            "text": "乌牛早茶",
+            "visible": true
+          },
+          {
+            "text": "Wuniuzao Green Tea",
+            "visible": false
+          },
+          {
+            "text": "永嘉板栗",
+            "visible": true
+          },
+          {
+            "text": "Yongjia Chestnut",
+            "visible": false
+          },
+          {
+            "text": "永嘉早香柚",
+            "visible": true
+          },
+          {
+            "text": "Yongjia Pomelo",
+            "visible": false
+          },
+          {
+            "text": "楠溪江稻米",
+            "visible": true
+          },
+          {
+            "text": "Nanxi River Rice",
+            "visible": false
+          },
+          {
+            "text": "跟着二十四节气，吃永嘉Eat Yongjia with the 24 Solar Terms",
+            "visible": true
+          },
+          {
+            "text": "乌牛早开采",
+            "visible": true
+          },
+          {
+            "text": "Wuniuzao harvest",
+            "visible": false
+          },
+          {
+            "text": "杨梅与山果",
+            "visible": true
+          },
+          {
+            "text": "Bayberry & hill fruit",
+            "visible": false
+          }
+        ],
+        "hidden_text_blocks": [
+          "#hero > div.wrap.hero-inner > div.hero-copy > p.eyebrow",
+          "#hero > div.wrap.hero-inner > div.hero-copy > p.hero-sub",
+          "#terroir > div.wrap > div.sec-head.reveal > p.eyebrow",
+          "#terroir > div.wrap > div.sec-head.reveal > h2.sec-title",
+          "#terroir > div.wrap > div.sec-head.reveal > p.sec-sub",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > h3:nth-of-type(2)",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > p:nth-of-type(2)",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > h3:nth-of-type(2)",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > p:nth-of-type(2)",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > h3:nth-of-type(2)",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > p:nth-of-type(2)",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > h3:nth-of-type(2)",
+          "div.wrap > div.terroir-grid > article.terroir-card.reveal > p:nth-of-type(2)",
+          "div.wrap > div.prod-grid > article.prod-card.reveal > h3.prod-name",
+          "div.wrap > div.prod-grid > article.prod-card.reveal > p.prod-en",
+          "div.wrap > div.prod-grid > article.prod-card.reveal > p.prod-desc",
+          "div.wrap > div.prod-grid > article.prod-card.reveal > h3.prod-name",
+          "div.wrap > div.prod-grid > article.prod-card.reveal > p.prod-en",
+          "div.wrap > div.prod-grid > article.prod-card.reveal > p.prod-desc",
+          "div.wrap > div.prod-grid > article.prod-card.reveal > h3.prod-name"
+        ],
+        "unexpected_hidden_text_blocks": [],
+        "unreadable_headings": [],
+        "broken_images": [],
+        "missing_anchors": [],
+        "overflowing_elements": [],
+        "overflow_details": [],
+        "visible_text_chars": 2195,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "javascript": true,
+        "console_errors": [],
+        "blocked_requests": []
+      },
+      {
+        "title": "永嘉农产品 | Yongjia Farm Produce",
+        "horizontal_overflow": false,
+        "page_width": 1440,
+        "viewport_width": 1440,
+        "page_height": 8643,
+        "headings": [
+          {
+            "text": "\n        一江楠溪水，养出永嘉好农品\n        One River, One Valley,Good Food from Yongjia\n      ",
+            "visible": true
+          },
+          {
+            "text": "山水之间，长出好味道",
+            "visible": true
+          },
+          {
+            "text": "Good Flavour Grows Between Mountains and Water",
+            "visible": true
+          },
+          {
+            "text": "楠溪江水",
+            "visible": true
+          },
+          {
+            "text": "Nanxi River Water",
+            "visible": true
+          },
+          {
+            "text": "丘陵云雾",
+            "visible": true
+          },
+          {
+            "text": "Misty Hillsides",
+            "visible": true
+          },
+          {
+            "text": "四季分明",
+            "visible": true
+          },
+          {
+            "text": "Four Clear Seasons",
+            "visible": true
+          },
+          {
+            "text": "耕读手艺",
+            "visible": true
+          },
+          {
+            "text": "Farm-and-Read Craft",
+            "visible": true
+          },
+          {
+            "text": "一江山水，四季鲜香One River, Four Seasons of Flavour",
+            "visible": true
+          },
+          {
+            "text": "乌牛早茶",
+            "visible": true
+          },
+          {
+            "text": "Wuniuzao Green Tea",
+            "visible": true
+          },
+          {
+            "text": "永嘉板栗",
+            "visible": true
+          },
+          {
+            "text": "Yongjia Chestnut",
+            "visible": true
+          },
+          {
+            "text": "永嘉早香柚",
+            "visible": true
+          },
+          {
+            "text": "Yongjia Pomelo",
+            "visible": true
+          },
+          {
+            "text": "楠溪江稻米",
+            "visible": true
+          },
+          {
+            "text": "Nanxi River Rice",
+            "visible": true
+          },
+          {
+            "text": "跟着二十四节气，吃永嘉Eat Yongjia with the 24 Solar Terms",
+            "visible": true
+          },
+          {
+            "text": "乌牛早开采",
+            "visible": true
+          },
+          {
+            "text": "Wuniuzao harvest",
+            "visible": true
+          },
+          {
+            "text": "杨梅与山果",
+            "visible": true
+          },
+          {
+            "text": "Bayberry & hill fruit",
+            "visible": true
+          }
+        ],
+        "hidden_text_blocks": [],
+        "unexpected_hidden_text_blocks": [],
+        "unreadable_headings": [],
+        "broken_images": [],
+        "missing_anchors": [],
+        "overflowing_elements": [],
+        "overflow_details": [],
+        "visible_text_chars": 8442,
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "javascript": false,
+        "console_errors": [],
+        "blocked_requests": []
+      }
+    ],
+    "limits": "offline; no backend/API validation; viewport screenshots; measurements are not a visual design approval"
+  }
+}

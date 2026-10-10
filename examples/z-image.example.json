@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "z-image": {
+      "type": "streamableHttp",
+      "url": "http://127.0.0.1:8766/mcp",
+      "headers": {"Authorization": "Bearer YOUR_MCP_TOKEN"}
+    }
+  }
+}

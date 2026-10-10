@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "minimax-h3-mcp"
+version = "0.1.0"
+description = "MCP server for ComfyUI-native MiniMax H3 8-step text-to-video and image-to-video"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "aiohttp>=3.12,<4",
+  "mcp>=2.1.1,<3",
+  "Pillow>=11,<13",
+  "pydantic>=2.11,<3",
+  "uvicorn>=0.35,<1",
+]
+
+[project.scripts]
+minimax-h3-mcp = "minimax_h3_mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/minimax_h3_mcp"]
+
+[tool.pyright]
+pythonVersion = "3.12"
+typeCheckingMode = "standard"

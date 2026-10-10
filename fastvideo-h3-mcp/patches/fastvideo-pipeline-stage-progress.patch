@@ -1,0 +1,19 @@
+--- a/fastvideo/pipelines/composed_pipeline_base.py
++++ b/fastvideo/pipelines/composed_pipeline_base.py
+@@ -523,8 +523,16 @@ class ComposedPipelineBase(ABC):
+         # Execute each stage
+         logger.info("Running pipeline stages: %s", self._stage_name_mapping.keys())
+         # logger.info("Batch: %s", batch)
++        emit_mcp_progress = os.environ.get("FASTVIDEO_MCP_PROGRESS", "0").strip().lower() in {
++            "1", "true", "yes", "on"
++        }
+         for stage in self.stages:
++            stage_name = getattr(stage, "_pipeline_stage_name", stage.__class__.__name__)
++            if emit_mcp_progress:
++                logger.info("MCP_PROGRESS pipeline_stage=%s phase=started", stage_name)
+             batch = stage(batch, fastvideo_args)
++            if emit_mcp_progress:
++                logger.info("MCP_PROGRESS pipeline_stage=%s phase=completed", stage_name)
+ 
+         # Return the output
+         return batch

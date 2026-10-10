@@ -1,0 +1,27 @@
+--- a/examples/inference/basic/basic_minimax_h3_t2v.py
++++ b/examples/inference/basic/basic_minimax_h3_t2v.py
+@@ -47,6 +47,10 @@ def parse_args() -> argparse.Namespace:
+                         "FASTVIDEO_ATTENTION_BACKEND=VIDEO_SPARSE_ATTN_H3 (the H3 denoising stage "
+                         "reads it when building per-step VSA metadata); set FASTVIDEO_VSA_CUTEDSL=1 "
+                         "to use the FA4 CuTe 256-tile kernels instead of Triton")
++    parser.add_argument("--vsa-tile-size",
++                        type=int,
++                        choices=(64, 256),
++                        default=256)
+     parser.add_argument("--torch-compile", action="store_true", help="torch.compile the DiT transformer path")
+     parser.add_argument("--compile-mode",
+                         default=None,
+@@ -64,11 +68,12 @@ def main() -> None:
+     output_dir = Path(args.output)
+     output_dir.mkdir(parents=True, exist_ok=True)
+ 
+-    experimental: dict[str, float] = {}
++    experimental: dict[str, object] = {}
+     if args.vsa_sparsity > 0.0:
+         # Same mechanism as examples/inference/minimax_h3/h3_vsa_dmd.py: boot-time
+         # run-level sparsity folded into FastVideoArgs.VSA_sparsity.
+         experimental["VSA_sparsity"] = args.vsa_sparsity
++        experimental["VSA_tile_size"] = args.vsa_tile_size
+ 
+     generator = VideoGenerator.from_config(
+         GeneratorConfig(

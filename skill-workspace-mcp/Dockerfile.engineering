@@ -1,0 +1,6 @@
+# Reuse the proven Python/Node/TypeScript runtime; existing tasks keep its old ID.
+ARG BASE_IMAGE=skill-workspace:0.1.0
+FROM ${BASE_IMAGE}
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends git \
+    && git --version && rm -rf /var/lib/apt/lists/*

@@ -1,0 +1,1283 @@
+{
+  "3": {
+    "inputs": {
+      "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "6": {
+    "inputs": {
+      "vae_name": "minimax_h3_video_vae_fp16.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "8": {
+    "inputs": {
+      "model": [
+        "189",
+        0
+      ],
+      "conditioning": [
+        "29",
+        0
+      ]
+    },
+    "class_type": "BasicGuider",
+    "_meta": {
+      "title": "Basic Guider"
+    }
+  },
+  "9": {
+    "inputs": {
+      "noise": [
+        "140",
+        0
+      ],
+      "guider": [
+        "8",
+        0
+      ],
+      "sampler": [
+        "145",
+        0
+      ],
+      "sigmas": [
+        "146",
+        0
+      ],
+      "latent_image": [
+        "248",
+        0
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "10": {
+    "inputs": {
+      "aspect_ratio": "16:9 (Widescreen)",
+      "megapixels": 0.5,
+      "multiple": 32
+    },
+    "class_type": "ResolutionSelector",
+    "_meta": {
+      "title": "Resolution Selector (Size)"
+    }
+  },
+  "19": {
+    "inputs": {
+      "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+      "type": "minimax",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "28": {
+    "inputs": {
+      "text": "24"
+    },
+    "class_type": "Text Multiline",
+    "_meta": {
+      "title": "Text Multiline"
+    }
+  },
+  "29": {
+    "inputs": {
+      "context_length": "22",
+      "audio_context_length": 24,
+      "conditioning": [
+        "39",
+        0
+      ],
+      "vae": [
+        "6",
+        0
+      ],
+      "latent": [
+        "39",
+        1
+      ],
+      "context_latent": [
+        "54",
+        2
+      ],
+      "audio_vae": [
+        "3",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3MotionContext",
+    "_meta": {
+      "title": "H3 Motion Context"
+    }
+  },
+  "31": {
+    "inputs": {
+      "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17",
+      "values.a": [
+        "331",
+        0
+      ]
+    },
+    "class_type": "ComfyMathExpression",
+    "_meta": {
+      "title": "Math Expression"
+    }
+  },
+  "34": {
+    "inputs": {
+      "samples": [
+        "9",
+        0
+      ],
+      "vae": [
+        "6",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "35": {
+    "inputs": {
+      "samples": [
+        "9",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    },
+    "class_type": "VAEDecodeAudio",
+    "_meta": {
+      "title": "VAE Decode Audio"
+    }
+  },
+  "39": {
+    "inputs": {
+      "prompt": [
+        "335",
+        0
+      ],
+      "width": [
+        "10",
+        0
+      ],
+      "height": [
+        "10",
+        1
+      ],
+      "length": [
+        "31",
+        1
+      ],
+      "ref_image_size": "match",
+      "clip": [
+        "19",
+        0
+      ],
+      "vae": [
+        "6",
+        0
+      ],
+      "audio_vae": [
+        "3",
+        0
+      ],
+      "ref_images.ref_image_0": [
+        "40",
+        0
+      ],
+      "ref_audios.ref_audio_1": [
+        "300",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3ReferenceToVideo",
+    "_meta": {
+      "title": "MiniMax H3 Reference to Video"
+    }
+  },
+  "40": {
+    "inputs": {
+      "image": "133.jpg"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "46": {
+    "inputs": {
+      "separator": "/",
+      "prompt1": [
+        "28",
+        0
+      ],
+      "prompt2": [
+        "47",
+        0
+      ]
+    },
+    "class_type": "easy promptConcat",
+    "_meta": {
+      "title": "PromptConcat"
+    }
+  },
+  "47": {
+    "inputs": {
+      "text": "clip"
+    },
+    "class_type": "Text Multiline",
+    "_meta": {
+      "title": "Text Multiline"
+    }
+  },
+  "54": {
+    "inputs": {
+      "total": [
+        "236",
+        0
+      ],
+      "initial_value1": [
+        "149",
+        0
+      ]
+    },
+    "class_type": "easy forLoopStart",
+    "_meta": {
+      "title": "For Loop Start"
+    }
+  },
+  "55": {
+    "inputs": {
+      "flow": [
+        "54",
+        0
+      ],
+      "initial_value1": [
+        "9",
+        0
+      ],
+      "initial_value2": [
+        "174",
+        0
+      ]
+    },
+    "class_type": "easy forLoopEnd",
+    "_meta": {
+      "title": "For Loop End"
+    }
+  },
+  "61": {
+    "inputs": {
+      "expression": "(a+1)*b",
+      "a": [
+        "54",
+        1
+      ],
+      "b": [
+        "245",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "68": {
+    "inputs": {
+      "source": [
+        "55",
+        0
+      ]
+    },
+    "class_type": "PreviewAny",
+    "_meta": {
+      "title": "Preview as Text"
+    }
+  },
+  "78": {
+    "inputs": {
+      "anything": [
+        "68",
+        0
+      ]
+    },
+    "class_type": "easy cleanGpuUsed",
+    "_meta": {
+      "title": "Clean VRAM Used"
+    }
+  },
+  "80": {
+    "inputs": {
+      "input_mode": "images+audio",
+      "input_mode.fps": 24,
+      "output_mode": "save",
+      "output_mode.save_metadata": false,
+      "filename_prefix": [
+        "46",
+        0
+      ],
+      "video-preview": "",
+      "input_mode.images": [
+        "161",
+        0
+      ],
+      "input_mode.audio": [
+        "161",
+        1
+      ]
+    },
+    "class_type": "easy saveVideo",
+    "_meta": {
+      "title": "Save Video"
+    }
+  },
+  "82": {
+    "inputs": {
+      "output_type": "string",
+      "*": [
+        "80",
+        1
+      ]
+    },
+    "class_type": "easy convertAnything",
+    "_meta": {
+      "title": "Convert Any"
+    }
+  },
+  "83": {
+    "inputs": {
+      "text": "output/24/clip_00024_.mp4",
+      "anything": [
+        "82",
+        0
+      ]
+    },
+    "class_type": "easy showAnything",
+    "_meta": {
+      "title": "Show Any"
+    }
+  },
+  "138": {
+    "inputs": {
+      "model": [
+        "189",
+        0
+      ],
+      "conditioning": [
+        "158",
+        0
+      ]
+    },
+    "class_type": "BasicGuider",
+    "_meta": {
+      "title": "Basic Guider"
+    }
+  },
+  "140": {
+    "inputs": {
+      "noise_seed": 896073996309696
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "RandomNoise"
+    }
+  },
+  "145": {
+    "inputs": {
+      "sampler_name": "euler"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "146": {
+    "inputs": {
+      "scheduler": "beta",
+      "steps": 8,
+      "denoise": 1,
+      "model": [
+        "189",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "BasicScheduler"
+    }
+  },
+  "147": {
+    "inputs": {
+      "samples": [
+        "149",
+        0
+      ],
+      "vae": [
+        "6",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "148": {
+    "inputs": {
+      "samples": [
+        "149",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    },
+    "class_type": "VAEDecodeAudio",
+    "_meta": {
+      "title": "VAE Decode Audio"
+    }
+  },
+  "149": {
+    "inputs": {
+      "noise": [
+        "140",
+        0
+      ],
+      "guider": [
+        "138",
+        0
+      ],
+      "sampler": [
+        "145",
+        0
+      ],
+      "sigmas": [
+        "146",
+        0
+      ],
+      "latent_image": [
+        "209",
+        0
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "SamplerCustomAdvanced"
+    }
+  },
+  "158": {
+    "inputs": {
+      "prompt": [
+        "336",
+        0
+      ],
+      "width": [
+        "10",
+        0
+      ],
+      "height": [
+        "10",
+        1
+      ],
+      "length": [
+        "162",
+        1
+      ],
+      "ref_image_size": "match",
+      "clip": [
+        "19",
+        0
+      ],
+      "vae": [
+        "6",
+        0
+      ],
+      "audio_vae": [
+        "3",
+        0
+      ],
+      "ref_images.ref_image_0": [
+        "40",
+        0
+      ],
+      "ref_audios.ref_audio_0": [
+        "290",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3ReferenceToVideo",
+    "_meta": {
+      "title": "MiniMax H3 Reference to Video"
+    }
+  },
+  "161": {
+    "inputs": {
+      "trim_frames": [
+        "29",
+        1
+      ],
+      "fps": 24,
+      "match_tail": true,
+      "images": [
+        "34",
+        0
+      ],
+      "audio": [
+        "35",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3MotionContextTrim",
+    "_meta": {
+      "title": "H3 Motion Context Trim"
+    }
+  },
+  "162": {
+    "inputs": {
+      "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17",
+      "values.a": [
+        "169",
+        0
+      ]
+    },
+    "class_type": "ComfyMathExpression",
+    "_meta": {
+      "title": "Math Expression"
+    }
+  },
+  "169": {
+    "inputs": {
+      "value": [
+        "214",
+        0
+      ]
+    },
+    "class_type": "PrimitiveFloat",
+    "_meta": {
+      "title": "时长"
+    }
+  },
+  "173": {
+    "inputs": {
+      "input_mode": "images+audio",
+      "input_mode.fps": 24,
+      "output_mode": "save",
+      "output_mode.save_metadata": false,
+      "filename_prefix": [
+        "46",
+        0
+      ],
+      "video-preview": "",
+      "input_mode.images": [
+        "147",
+        0
+      ],
+      "input_mode.audio": [
+        "148",
+        0
+      ]
+    },
+    "class_type": "easy saveVideo",
+    "_meta": {
+      "title": "Save Video"
+    }
+  },
+  "174": {
+    "inputs": {
+      "any_1": [
+        "54",
+        3
+      ],
+      "any_2": [
+        "82",
+        0
+      ]
+    },
+    "class_type": "easy batchAnything",
+    "_meta": {
+      "title": "Batch Any"
+    }
+  },
+  "189": {
+    "inputs": {
+      "lora_name": "minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors",
+      "strength_model": 1,
+      "model": [
+        "190",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "190": {
+    "inputs": {
+      "model": [
+        "305",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3MemoryEfficientSageAttentionPatch",
+    "_meta": {
+      "title": "MiniMax H3 Mem Eff Sage Attention Patch"
+    }
+  },
+  "198": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "200",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "200": {
+    "inputs": {
+      "text": [
+        "201",
+        0
+      ],
+      "font": "font",
+      "wrap": true,
+      "trim": true,
+      "line_height": 1,
+      "font_size": 32,
+      "width": 512,
+      "height": 512,
+      "color": "black",
+      "background": "white",
+      "h_align": "left",
+      "v_align": "top",
+      "h_offset": 0,
+      "v_offset": 0,
+      "h_coverage": 100,
+      "fps": 24,
+      "fade_duration": 0.5
+    },
+    "class_type": "Text To Image (mtb)",
+    "_meta": {
+      "title": "Text To Image (mtb)"
+    }
+  },
+  "201": {
+    "inputs": {
+      "truncate_by": "characters",
+      "truncate_from": "beginning",
+      "truncate_to": 2,
+      "text": [
+        "68",
+        0
+      ]
+    },
+    "class_type": "Text String Truncate",
+    "_meta": {
+      "title": "Text String Truncate"
+    }
+  },
+  "209": {
+    "inputs": {
+      "av_latent": [
+        "158",
+        1
+      ],
+      "source_audio": [
+        "290",
+        0
+      ],
+      "audio_vae": [
+        "3",
+        0
+      ]
+    },
+    "class_type": "VRGDG_MiniMaxH3AudioDrive",
+    "_meta": {
+      "title": "LOCK SOURCE AUDIO / GENERATE VIDEO ONLY"
+    }
+  },
+  "211": {
+    "inputs": {
+      "audio": "01.mp3"
+    },
+    "class_type": "LoadAudio",
+    "_meta": {
+      "title": "Load Audio"
+    }
+  },
+  "214": {
+    "inputs": {
+      "Value": 15.000000000000004
+    },
+    "class_type": "DF_Float",
+    "_meta": {
+      "title": "Float"
+    }
+  },
+  "217": {
+    "inputs": {
+      "模型": "erik-svensson-cm/whisper-large-v3-ct2",
+      "每句最大长度": 1000,
+      "卸载模型": true,
+      "seed": 772068279346598,
+      "音频": [
+        "290",
+        0
+      ]
+    },
+    "class_type": "ASRMW",
+    "_meta": {
+      "title": "自动语音识别"
+    }
+  },
+  "229": {
+    "inputs": {
+      "expression": "(a+2)*b",
+      "a": [
+        "54",
+        1
+      ],
+      "b": [
+        "245",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "234": {
+    "inputs": {
+      "audio": [
+        "211",
+        0
+      ]
+    },
+    "class_type": "GetAudioDurationFromAudio",
+    "_meta": {
+      "title": "Get Audio Duration From Audio"
+    }
+  },
+  "236": {
+    "inputs": {
+      "expression": "(a+b-1)//b",
+      "a": [
+        "258",
+        0
+      ],
+      "b": [
+        "239",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "239": {
+    "inputs": {
+      "output_type": "int",
+      "*": [
+        "214",
+        0
+      ]
+    },
+    "class_type": "easy convertAnything",
+    "_meta": {
+      "title": "Convert Any"
+    }
+  },
+  "245": {
+    "inputs": {
+      "output_type": "int",
+      "*": [
+        "214",
+        0
+      ]
+    },
+    "class_type": "easy convertAnything",
+    "_meta": {
+      "title": "Convert Any"
+    }
+  },
+  "246": {
+    "inputs": {
+      "模型": "erik-svensson-cm/whisper-large-v3-ct2",
+      "每句最大长度": 1000,
+      "卸载模型": true,
+      "seed": 13264420640887,
+      "音频": [
+        "300",
+        0
+      ]
+    },
+    "class_type": "ASRMW",
+    "_meta": {
+      "title": "自动语音识别"
+    }
+  },
+  "247": {
+    "inputs": {
+      "text": "(4.62, 8.4) Субтитры подогнал «Симон»",
+      "anything": [
+        "246",
+        2
+      ]
+    },
+    "class_type": "easy showAnything",
+    "_meta": {
+      "title": "Show Any"
+    }
+  },
+  "248": {
+    "inputs": {
+      "av_latent": [
+        "39",
+        1
+      ],
+      "source_audio": [
+        "300",
+        0
+      ],
+      "audio_vae": [
+        "3",
+        0
+      ]
+    },
+    "class_type": "VRGDG_MiniMaxH3AudioDrive",
+    "_meta": {
+      "title": "LOCK SOURCE AUDIO / GENERATE VIDEO ONLY"
+    }
+  },
+  "250": {
+    "inputs": {
+      "anything": [
+        "82",
+        0
+      ]
+    },
+    "class_type": "easy clearCacheAll",
+    "_meta": {
+      "title": "Clear Cache All"
+    }
+  },
+  "251": {
+    "inputs": {
+      "anything": [
+        "82",
+        0
+      ]
+    },
+    "class_type": "easy cleanGpuUsed",
+    "_meta": {
+      "title": "Clean VRAM Used"
+    }
+  },
+  "252": {
+    "inputs": {
+      "text": "### subject_definitions\n*   **人物参考**：以用户提供的图片中的人物为唯一身份参考。男性，年轻，黑色微卷短发，身穿深色立领外套。严格保留其五官、发型、年龄感与服装特征。\n*   **图片参考**：以图片作为首帧视觉基础，保留站台环境、黄昏光线、人物侧脸轮廓及背景虚化关系。\n*   **音频参考**：以用户实际提供的音乐为情绪与节奏依据。歌词时间戳仅使用用户提供的内容，无法确认的字词标注待核对，不自行补写。\n\n### summary\n本段发生在一个黄昏的站台。人物站在黄线边缘，微微仰头，望向远处的落日与轨道。情绪从安静的等待，逐渐转为被光线与微风轻轻触碰的柔和瞬间。画面以人物侧脸与逆光轮廓为核心，保留图片原有的暖色调与空间纵深感。\n\n### retention_analysis\n*   **人物与服装**：严格保留图片中男性的黑色短发、深色立领外套及侧脸轮廓，不改变其身份特征。\n*   **第一帧**：以图片作为第一镜的起始画面，保留站台顶棚、黄线、轨道及背景中模糊的站台结构。\n*   **色彩与空间**：延续图片中黄昏的暖橙与深褐对比，保留背景中站台灯箱的暖黄光晕，以及远处轨道延伸的透视关系。\n*   **光影**：保留逆光下人物面部边缘的柔和轮廓光，以及背景中太阳的圆形高光，不压暗暗部细节。\n\n### detailed_description\n**镜头一（0.0s - 2.5s）**\n从参考首帧开始。固定镜头，中景侧拍。人物站在站台黄线内，身体微微后仰，头部向上抬起，视线越过镜头，望向画面右上方。背景中，站台顶棚的阴影覆盖画面左上方，右侧轨道延伸向远处，一轮暖橙色的落日悬在轨道上方。人物保持静止，只有发丝在微风中轻轻晃动。画面结束于人物微微眯起眼睛，感受光线落在脸上的瞬间。\n\n**镜头二（2.5s - 5.0s）**\n镜头以极缓慢的速度向人物面部靠近，景别从侧脸中景变为近景。人物保持仰头姿势，喉结微微滚动，像是在轻轻呼吸。背景中，站台灯箱的暖光在画面左侧形成柔和的光斑。人物没有转头，但睫毛在逆光中投下细碎的阴影。画面结束于人物嘴角极轻微地放松，仿佛在等待什么。\n\n**镜头三（5.0s - 7.5s）**\n镜头保持固定，人物缓缓将视线从远处收回，微微低头。景别为侧脸近景。背景中，轨道上的落日被站台结构部分遮挡，光线从人物身后透出，勾勒出外套的轮廓。人物抬起右手，手指轻轻碰了一下被风吹到额前的碎发，动作很慢。画面结束于手指停在发梢，人物重新抬眼，看向镜头方向。\n\n**镜头四（7.5s - 10.0s）**\n镜头轻微向右平移，跟随人物视线移动。人物侧身转向镜头，但并未完全正对，视线落在镜头略偏下的位置。景别为中近景。背景中，站台顶棚的线条与轨道形成斜向构图，暖光从人物身后洒下。人物微微抿了一下嘴，然后轻轻呼出一口气，肩膀随之放松。画面结束于人物站在黄线边，安静地看向镜头，身后的落日将他的轮廓镀上一层柔和的暖边。\n\n### overall_soundscape\n环境音以站台远处的轻风、轨道上细微的金属震颤声、以及衣料摩擦的轻响为主。音量克制，不遮盖音乐。人物没有对白，只有呼吸的轻微起伏。\n\n### non_diegetic_music\n以用户提供的音乐为情绪依据，保持原曲的温柔与舒缓节奏。不添加与原曲冲突的 trap 鼓点、808 低音或喊唱表演。音乐与画面同步，在人物抬头与低头时，配合乐句的呼吸停顿进行切镜。\n\n**画幅**：16:9。",
+      "anything": [
+        "335",
+        0
+      ]
+    },
+    "class_type": "easy showAnything",
+    "_meta": {
+      "title": "Show Any"
+    }
+  },
+  "258": {
+    "inputs": {
+      "expression": "a-b",
+      "a": [
+        "234",
+        0
+      ],
+      "b": [
+        "239",
+        0
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "273": {
+    "inputs": {
+      "text": "226",
+      "anything": [
+        "31",
+        1
+      ]
+    },
+    "class_type": "easy showAnything",
+    "_meta": {
+      "title": "Show Any"
+    }
+  },
+  "284": {
+    "inputs": {
+      "expression": "a/24",
+      "a": [
+        "162",
+        1
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "286": {
+    "inputs": {
+      "text1": "0",
+      "text2": ":",
+      "text3": [
+        "316",
+        0
+      ],
+      "delimiter": ""
+    },
+    "class_type": "ttN concat",
+    "_meta": {
+      "title": "textConcat"
+    }
+  },
+  "289": {
+    "inputs": {
+      "start_time": "0:00.000",
+      "end_time": [
+        "286",
+        0
+      ],
+      "audio": [
+        "211",
+        0
+      ]
+    },
+    "class_type": "ACE_AudioCrop",
+    "_meta": {
+      "title": "🅐 Audio Crop"
+    }
+  },
+  "290": {
+    "inputs": {
+      "audio": [
+        "289",
+        0
+      ]
+    },
+    "class_type": "PreviewAudio",
+    "_meta": {
+      "title": "Preview Audio"
+    }
+  },
+  "291": {
+    "inputs": {
+      "expression": "a/24-0.917",
+      "a": [
+        "293",
+        1
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "293": {
+    "inputs": {
+      "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17",
+      "values.a": [
+        "61",
+        0
+      ]
+    },
+    "class_type": "ComfyMathExpression",
+    "_meta": {
+      "title": "Math Expression"
+    }
+  },
+  "295": {
+    "inputs": {
+      "text1": "0",
+      "text2": ":",
+      "text3": [
+        "318",
+        0
+      ],
+      "delimiter": ""
+    },
+    "class_type": "ttN concat",
+    "_meta": {
+      "title": "textConcat"
+    }
+  },
+  "297": {
+    "inputs": {
+      "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17",
+      "values.a": [
+        "229",
+        0
+      ]
+    },
+    "class_type": "ComfyMathExpression",
+    "_meta": {
+      "title": "Math Expression"
+    }
+  },
+  "298": {
+    "inputs": {
+      "expression": "a/24",
+      "a": [
+        "297",
+        1
+      ]
+    },
+    "class_type": "MathExpression|pysssss",
+    "_meta": {
+      "title": "Math Expression 🐍"
+    }
+  },
+  "300": {
+    "inputs": {
+      "start_time": [
+        "301",
+        0
+      ],
+      "end_time": [
+        "295",
+        0
+      ],
+      "audio": [
+        "211",
+        0
+      ]
+    },
+    "class_type": "ACE_AudioCrop",
+    "_meta": {
+      "title": "🅐 Audio Crop"
+    }
+  },
+  "301": {
+    "inputs": {
+      "text1": "0",
+      "text2": ":",
+      "text3": [
+        "317",
+        0
+      ],
+      "delimiter": ""
+    },
+    "class_type": "ttN concat",
+    "_meta": {
+      "title": "textConcat"
+    }
+  },
+  "305": {
+    "inputs": {
+      "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "309": {
+    "inputs": {
+      "value": "# 温柔叙事 MV 提示词生成指令\n# 稻田晚风 × 青瓷留白\n\n你是一名擅长温柔叙事、自然光影和东方生活美学的 MV 导演。\n根据用户提供的人物参考图、音乐、歌词时间戳与故事要求，生成适用于当前 H3 Ref2VA 工作流的视频提示词。\n\n一、核心感受\n表现“日常生活里被轻轻珍惜的瞬间”。\n稻花香的意象：夏日晚风、田埂、旧院子、晒暖的衣服、归家的脚步。亲切、有生活温度，让人想起曾经陪伴自己的人。\n青花瓷的意象：清润的青蓝、瓷白、雨后天光、细腻材质与含蓄留白。将这份气质融入真实生活，不强制改成古装，不复刻已有 MV。\n情绪从稍有距离，到察觉对方的关心，再到自然靠近。温柔不等于全程微笑；允许欲言又止、低头、停步、回望和安静的陪伴。\n\n二、画面风格\n统一使用天青、浅绿、米白与少量柔暖日光。根据参考图保留原有色彩关系。\n光线以窗边散射光、树荫反光和傍晚侧逆光为主。明暗过渡柔和，亮部保留云层、白衣与皮肤细节；暗部清晰，不压成死黑，也不蒙一层灰。\n皮肤保留真实纹理和自然肤色；头发有细碎发丝，棉麻衣物有柔软褶皱，瓷器有克制的釉面反光。\n柔和的是光线与反差，人物眼睛、面部轮廓和关键道具仍应清楚。避免过度磨皮、蜡像感、过量光晕和锐化白边。\n风格在同一音乐情绪段落内保持稳定。只有音乐情感明显变化时，才逐渐调整光线与色彩，不能因换场景突然变成另一种画风。\n\n三、人物与视角\n严格保留参考图中的人物身份、五官、发型、年龄感、服装及配饰。\n若使用母亲第一视角，镜头就是母亲的目光。母亲的手、手臂、肩膀、衣袖、身体、影子和镜面倒影均不入画。\n女儿看向镜头，就是看向母亲。她可以自然整理头发、停下等候、回头确认母亲是否跟上。女儿自身的手部动作可以出现。\n镜头高度和距离必须符合母亲所处的位置，不突然跳到航拍、贴地或围绕母亲旋转的第三人称视角。\n\n四、运镜与剪辑\n让镜头随着人物的注意力移动。\n女儿回头时，镜头轻轻靠近，接住她的目光；女儿沿田埂慢走时，镜头以步行速度跟随；女儿看向窗外时，镜头缓慢转向她所看的地方；两人安静相对时，保持固定构图，留出呼吸和眼神变化。\n每个镜头只安排一种主要运动。固定镜头是有效选择，不强制所有镜头移动。\n取消甩镜、快速变焦、高速跟拍和连续环绕的数量配额。避免频繁倾斜机位、突然加速和机械式卡鼓点。\n切镜优先落在乐句结束、呼吸停顿、视线转移或动作完成处。可以在微笑出现后多停留片刻，不急着切走。\n镜头长短随真实音乐调整，不把整段平均切碎。副歌可以扩大空间或稍微加快动作，但仍保留柔和与连贯。\n\n五、故事与细节\n每个镜头必须推进一个小动作，或改变人物之间的情绪关系。\n不要连续堆叠“人物站在花田里微笑”的画面。\n用可见的动作表达感受：女儿原本走得稍快，回头发现母亲落在后面，于是放慢脚步；她想说话，又轻轻抿住嘴，最后用一个笑回应镜头；风把头发吹到脸侧，她整理好头发，却仍站在原地等母亲靠近。\n这些只是动作参考，应服从用户已有故事，不要每段都重复使用。\n每个镜头包含一个真实环境细节、一个细微人物动作，以及一个贯穿段落的视觉线索。例如窗帘被风轻轻托起、视线从远处移回镜头、反复出现的青瓷杯。第一视角规则始终优先，不能用母亲衣角作为前景。\n稻田、青瓷、雨檐等元素只在故事需要时出现，不机械地全部塞进每个镜头。\n\n六、音乐与声音\n以实际上传音乐为情绪和节奏依据，不默认说唱，不添加与原曲冲突的 trap 鼓点、808 低音或喊唱表演。\n歌词及时间戳只使用用户提供或实际识别的内容；无法确认的字词标注待核对，不自行补写。\n剧情镜头默认不要求人物对口型。只有用户明确要求演唱镜头时，才安排适度的口型表演。\n若最终成片需要保留原歌曲，应在剪辑阶段使用原音轨，不把“音频参考”当作能够逐字、逐音复刻原曲的保证。\n环境声音以轻风、衣料、脚步、细雨等为辅，音量克制，不遮盖音乐。\n\n七、输出要求\n保持当前工作流使用的六段结构：\nsubject_definitions:\n定义人物、图片及音频参考标签，不凭空增加人物特征。保持工作流实际传入的参考标签和对应关系。\nsummary:\n概述本段发生的小事件、情感变化与参考关系。\nretention_analysis:\n说明人物、服装、第一帧、色彩及空间关系如何保留。\ndetailed_description:\n按顺序写具体镜头。第一镜从参考首帧开始；后续镜头使用递增时间戳，并严格落在本段时长内。\n每镜写清人物动作、环境细节、景别、主要运镜和结束状态。\n以一个具体、可停留的画面收尾，例如女儿停在田埂上，回头等镜头慢慢靠近。\noverall_soundscape:\n描述克制的环境音与动作声音。\nnon_diegetic_music:\n说明以提供的音乐为依据，不擅自改变曲风或加入额外配器。\n画幅为 16:9。技术分辨率由工作流设置，不用“4K、大片、超清”等词代替具体画面描述。"
+    },
+    "class_type": "PrimitiveStringMultiline",
+    "_meta": {
+      "title": "Input Text (Prompt)"
+    }
+  },
+  "310": {
+    "inputs": {
+      "separator": "",
+      "text1": [
+        "311",
+        0
+      ],
+      "text2": [
+        "309",
+        0
+      ]
+    },
+    "class_type": "CR Text Concatenate",
+    "_meta": {
+      "title": "🔤 CR Text Concatenate"
+    }
+  },
+  "311": {
+    "inputs": {
+      "value": ""
+    },
+    "class_type": "PrimitiveStringMultiline",
+    "_meta": {
+      "title": "Input Text (Prompt)"
+    }
+  },
+  "316": {
+    "inputs": {
+      "output_type": "string",
+      "*": [
+        "284",
+        1
+      ]
+    },
+    "class_type": "easy convertAnything",
+    "_meta": {
+      "title": "Convert Any"
+    }
+  },
+  "317": {
+    "inputs": {
+      "output_type": "string",
+      "*": [
+        "291",
+        1
+      ]
+    },
+    "class_type": "easy convertAnything",
+    "_meta": {
+      "title": "Convert Any"
+    }
+  },
+  "318": {
+    "inputs": {
+      "output_type": "string",
+      "*": [
+        "298",
+        1
+      ]
+    },
+    "class_type": "easy convertAnything",
+    "_meta": {
+      "title": "Convert Any"
+    }
+  },
+  "319": {
+    "inputs": {
+      "output_type": "string",
+      "*": [
+        "310",
+        0
+      ]
+    },
+    "class_type": "easy convertAnything",
+    "_meta": {
+      "title": "Convert Any"
+    }
+  },
+  "320": {
+    "inputs": {
+      "text": "(5.6, 15.04) Thank you for watching.",
+      "anything": [
+        "217",
+        2
+      ]
+    },
+    "class_type": "easy showAnything",
+    "_meta": {
+      "title": "Show Any"
+    }
+  },
+  "331": {
+    "inputs": {
+      "audio": [
+        "300",
+        0
+      ]
+    },
+    "class_type": "GetAudioDurationFromAudio",
+    "_meta": {
+      "title": "Get Audio Duration From Audio"
+    }
+  },
+  "335": {
+    "inputs": {
+      "model": "deepseek-flash",
+      "role": [
+        "319",
+        0
+      ],
+      "prompt": [
+        "246",
+        2
+      ],
+      "temperature": 0.6,
+      "max_tokens": 4096,
+      "top_p": 1,
+      "presence_penalty": 0,
+      "frequency_penalty": 0,
+      "reasoning_effort": "none",
+      "seed": 574523852,
+      "skip_error": false,
+      "image1": [
+        "40",
+        0
+      ]
+    },
+    "class_type": "RHLLMChatNode",
+    "_meta": {
+      "title": "RH LLM Chat Completions"
+    }
+  },
+  "336": {
+    "inputs": {
+      "model": "deepseek-flash",
+      "role": [
+        "217",
+        2
+      ],
+      "prompt": [
+        "319",
+        0
+      ],
+      "temperature": 0.6,
+      "max_tokens": 4096,
+      "top_p": 1,
+      "presence_penalty": 0,
+      "frequency_penalty": 0,
+      "reasoning_effort": "none",
+      "seed": 58616005,
+      "skip_error": false,
+      "image1": [
+        "40",
+        0
+      ]
+    },
+    "class_type": "RHLLMChatNode",
+    "_meta": {
+      "title": "RH LLM Chat Completions"
+    }
+  }
+}

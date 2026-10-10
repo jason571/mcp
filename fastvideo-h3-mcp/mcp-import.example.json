@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fastvideo-h3": {
+      "type": "streamableHttp",
+      "url": "http://192.168.108.50:8765/mcp",
+      "headers": {
+        "Authorization": "YOUR_MCP_TOKEN"
+      },
+      "description": "FastH3 and MiniMax H3 Base video generation with progress"
+    }
+  }
+}

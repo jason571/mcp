@@ -1,0 +1,53 @@
+{
+  "source_run": "run-1a113dfb472-7-9",
+  "files": [
+    {
+      "content": "/* Yongjia farm produce site — progressive enhancement only.\n   Language switching is handled by the assembler helper; this file adds\n   reveal-on-scroll, mobile nav toggle and a small catalogue filter. */\n(function () {\n  'use strict';\n\n  var root = document.documentElement;\n  root.classList.add('js-ready');\n\n  /* ---- mobile navigation ---- */\n  var navToggle = document.getElementById('navToggle');\n  var navList = document.getElementById('navList');\n  if (navToggle && navList) {\n    navToggle.addEventListener('click', function () {\n      var open = navList.classList.toggle('is-open');\n      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');\n    });\n    navList.addEventListener('click', function (event) {\n      if (event.target.closest('a')) {\n        navList.classList.remove('is-open');\n        navToggle.setAttribute('aria-expanded', 'false');\n      }\n    });\n  }\n\n  /* ---- reveal on scroll (content stays readable without JS) ---- */\n  var revealItems = Array.prototype.slice.call(document.querySelectorAll('.reveal'));\n  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;\n\n  if (!('IntersectionObserver' in window) || reduceMotion) {\n    revealItems.forEach(function (el) { el.classList.add('is-visible'); });\n  } else {\n    var observer = new IntersectionObserver(function (entries) {\n      entries.forEach(function (entry) {\n        if (entry.isIntersecting) {\n          entry.target.classList.add('is-visible');\n          observer.unobserve(entry.target);\n        }\n      });\n    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });\n    revealItems.forEach(function (el) { observer.observe(el); });\n  }\n\n  /* ---- catalogue filter ---- */\n  var filterButtons = Array.prototype.slice.call(document.querySelectorAll('.filter-btn'));\n  var productCards = Array.prototype.slice.call(document.querySelectorAll('[data-category]'));\n  if (filterButtons.length && productCards.length) {\n    filterButtons.forEach(function (btn) {\n      btn.addEventListener('click', function () {\n        var key = btn.getAttribute('data-filter');\n        filterButtons.forEach(function (b) {\n          var active = b === btn;\n          b.classList.toggle('is-active', active);\n          b.setAttribute('aria-pressed', active ? 'true' : 'false');\n        });\n        productCards.forEach(function (card) {\n          var match = key === 'all' || card.getAttribute('data-category') === key;\n          card.hidden = !match;\n        });\n      });\n    });\n  }\n\n  /* ---- year stamp ---- */\n  var yearNodes = document.querySelectorAll('[data-year]');\n  var year = String(new Date().getFullYear());\n  Array.prototype.forEach.call(yearNodes, function (node) { node.textContent = year; });\n})();\n",
+      "path": "interactions.js"
+    },
+    {
+      "path": "page.json",
+      "value": {
+        "css_file": "theme.css",
+        "description": "永嘉特色农产品双语宣传页：乌牛早茶、永嘉香柚、楠溪江杨梅、高山蜂蜜、稻田米与农旅礼盒。",
+        "javascript_file": "interactions.js",
+        "language": "zh",
+        "languages": [
+          "zh",
+          "en"
+        ],
+        "parts": [
+          {
+            "file": "parts/header.html",
+            "id": "header"
+          },
+          {
+            "file": "parts/hero.html",
+            "id": "hero"
+          },
+          {
+            "file": "parts/products.html",
+            "id": "products"
+          },
+          {
+            "file": "parts/origin.html",
+            "id": "origin"
+          },
+          {
+            "file": "parts/craft.html",
+            "id": "craft"
+          },
+          {
+            "file": "parts/experience.html",
+            "id": "experience"
+          },
+          {
+            "file": "parts/footer.html",
+            "id": "footer"
+          }
+        ],
+        "title": "永嘉农产品 · 楠溪江畔的自然馈赠 | Yongjia Farm Produce"
+      }
+    }
+  ]
+}

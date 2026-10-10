@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "lesson-renderer": {
+      "type": "streamableHttp",
+      "url": "http://127.0.0.1:8793/mcp",
+      "headers": {"Authorization": "Bearer YOUR_MCP_TOKEN"}
+    }
+  }
+}

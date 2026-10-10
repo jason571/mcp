@@ -1,0 +1,17 @@
+diff --git a/fastvideo/pipelines/lora_pipeline.py b/fastvideo/pipelines/lora_pipeline.py
+index 04c474b..cf6cc88 100644
+--- a/fastvideo/pipelines/lora_pipeline.py
++++ b/fastvideo/pipelines/lora_pipeline.py
+@@ -324,6 +324,12 @@ class LoRAPipeline(ComposedPipelineBase):
+             # Extract alpha values and weights in a single pass
+             to_merge_params: defaultdict[Hashable, dict[Any, Any]] = (defaultdict(dict))
+             for name, weight in lora_state_dict.items():
++                # PEFT/Diffusers serializes the adapter nickname between the
++                # LoRA side and the weight suffix (for example,
++                # ``lora_A.default.weight``). FastVideo stores one selected
++                # adapter per load, so normalize that default nickname here.
++                name = name.replace(".lora_A.default.", ".lora_A.")
++                name = name.replace(".lora_B.default.", ".lora_B.")
+                 # Extract weights (lora_A, lora_B, and lora_alpha)
+                 name = name.replace("diffusion_model.", "")
+                 name = name.replace(".weight", "")

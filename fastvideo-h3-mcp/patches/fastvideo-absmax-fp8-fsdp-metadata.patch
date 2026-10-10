@@ -1,0 +1,15 @@
+--- a/fastvideo/layers/quantization/absmax_fp8.py
++++ b/fastvideo/layers/quantization/absmax_fp8.py
+@@ -176,7 +176,11 @@ class AbsMaxFP8LinearMethod(LinearMethodBase):
+         bias: torch.Tensor | None = None,
+     ) -> torch.Tensor:
+         weight_quant = layer.weight
+-        output_dtype: torch.dtype = weight_quant.output_dtype
++        output_dtype: torch.dtype = getattr(
++            weight_quant,
++            "output_dtype",
++            x.dtype if x.dtype in (torch.bfloat16, torch.float16, torch.float32) else torch.bfloat16,
++        )
+         scale_weight: torch.Tensor = layer.scale_weight.data.to(output_dtype)
+         scale_input: torch.Tensor = layer.scale_input.data.to(output_dtype)
+         weight_output_type = weight_quant.to(dtype=output_dtype)

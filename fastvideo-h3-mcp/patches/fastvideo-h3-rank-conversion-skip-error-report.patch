@@ -1,0 +1,44 @@
+diff --git a/scripts/checkpoint_conversion/convert_minimax_h3_adaln_rank.py b/scripts/checkpoint_conversion/convert_minimax_h3_adaln_rank.py
+--- a/scripts/checkpoint_conversion/convert_minimax_h3_adaln_rank.py
++++ b/scripts/checkpoint_conversion/convert_minimax_h3_adaln_rank.py
+@@ -38,6 +38,10 @@ def parse_args() -> argparse.Namespace:
+     p.add_argument("--grid", type=int, default=4096, help="Timestep samples used to fit the basis.")
+     p.add_argument("--freq-dim", type=int, default=256)
+     p.add_argument("--report-only", action="store_true", help="Fit and report error without writing.")
++    p.add_argument(
++        "--skip-error-report", action="store_true",
++        help="Skip the expensive all-block output-error report before conversion.",
++    )
+     return p.parse_args()
+ 
+ 
+@@ -76,17 +80,18 @@ def main() -> None:
+ 
+     basis, u = fit_basis(src, index_map, args.rank, args.grid, args.freq_dim)
+ 
+-    # Worst-case induced error on the actual modulation outputs.
+-    worst = 0.0
+-    scale = 0.0
+-    for key in sorted(k for k in index_map if k.endswith(ADALN_SUFFIX) or k == NORM_OUT_WEIGHT):
+-        w = load_keys(src, index_map, [key])[key].double()
+-        ref = u @ w.T
+-        approx = (u @ basis) @ (w @ basis).T
+-        worst = max(worst, (ref - approx).abs().max().item())
+-        scale = max(scale, ref.abs().max().item())
+-    print(f"modulation error over all projections: max|err|={worst:.3e} "
+-          f"(|Wu|max={scale:.3f}, relative={worst / scale:.3e})")
++    if not args.skip_error_report:
++        # Worst-case induced error on the actual modulation outputs.
++        worst = 0.0
++        scale = 0.0
++        for key in sorted(k for k in index_map if k.endswith(ADALN_SUFFIX) or k == NORM_OUT_WEIGHT):
++            w = load_keys(src, index_map, [key])[key].double()
++            ref = u @ w.T
++            approx = (u @ basis) @ (w @ basis).T
++            worst = max(worst, (ref - approx).abs().max().item())
++            scale = max(scale, ref.abs().max().item())
++        print(f"modulation error over all projections: max|err|={worst:.3e} "
++              f"(|Wu|max={scale:.3f}, relative={worst / scale:.3e})")
+     if args.report_only:
+         return
+ 

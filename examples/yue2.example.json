@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "yue2": {
+      "type": "streamableHttp",
+      "url": "http://127.0.0.1:8767/mcp",
+      "headers": {"Authorization": "Bearer YOUR_MCP_TOKEN"}
+    }
+  }
+}

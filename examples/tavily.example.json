@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "tavily": {
+      "type": "streamableHttp",
+      "url": "https://mcp.tavily.com/mcp/",
+      "headers": {"Authorization": "Bearer YOUR_TAVILY_API_KEY"}
+    }
+  }
+}

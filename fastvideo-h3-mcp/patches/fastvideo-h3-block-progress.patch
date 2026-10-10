@@ -1,0 +1,50 @@
+--- a/fastvideo/models/dits/minimax_h3.py
++++ b/fastvideo/models/dits/minimax_h3.py
+@@ -884,6 +884,15 @@
+ 
+         # The eager driver owns profiling markers while each block's compiled
+         # forward owns the graph that the marker surrounds.
++        mcp_step = getattr(self, "_mcp_progress_step", None)
++        mcp_total_steps = getattr(self, "_mcp_progress_total_steps", None)
++        total_blocks = len(self.transformer_blocks)
++        ff_chunk_tokens = self.transformer_blocks[0].ff.chunk_tokens
++        block_progress_stride = (
++            1
++            if ff_chunk_tokens and packed_hidden_states.shape[-2] > ff_chunk_tokens
++            else 5
++        )
+         for block_index, block in enumerate(self.transformer_blocks):
+             with nvtx_range(f"minimax_h3.transformer_block.{block_index}"):
+                 packed_hidden_states = block(
+@@ -893,6 +902,19 @@
+                     rotary_emb,
+                     original_seq_len,
+                 )
++            block_number = block_index + 1
++            if (
++                mcp_step is not None
++                and mcp_total_steps is not None
++                and (block_number % block_progress_stride == 0 or block_number == total_blocks)
++            ):
++                logger.info(
++                    "MCP_PROGRESS h3_transformer_block step=%d/%d block=%d/%d phase=completed",
++                    mcp_step,
++                    mcp_total_steps,
++                    block_number,
++                    total_blocks,
++                )
+ 
+         packed_hidden_states = self.norm_out(
+             packed_hidden_states,
+--- a/fastvideo/pipelines/basic/minimax_h3/stages/minimax_h3_denoising.py
++++ b/fastvideo/pipelines/basic/minimax_h3/stages/minimax_h3_denoising.py
+@@ -221,6 +221,9 @@
+                     # CUDAGraphs that has been overwritten" (surfaces at sp=1;
+                     # sp>1 is masked by collective-induced graph breaks).
+                     torch.compiler.cudagraph_mark_step_begin()
++                    if emit_mcp_progress:
++                        self.transformer._mcp_progress_step = index + 1
++                        self.transformer._mcp_progress_total_steps = len(video_timesteps)
+                     with trace_step(index), set_forward_context(
+                             current_timestep=index,
+                             attn_metadata=attn_metadata,
